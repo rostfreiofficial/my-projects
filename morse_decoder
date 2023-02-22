@@ -1,0 +1,73 @@
+# латинский алфавит
+symbols = "qwertyuiopasdfghjklzxcvbnnm1234567890 /"
+d = {'A':'.-', 'B':'-...', 'C':'-.-.','D':'-..','E':'.','F':'..-.',
+    'G':'--.','H':'....','I':'..','J':'.---', 'K':'-.-', 'L':'.-..',
+    'M':'--', 'N':'-.', 'O':'---', 'P':'.--.','Q':'--.-', 'R':'.-.',
+    'S':'...','T':'-', 'U':'..-', 'V':'...-', 'W':'.--', 'X':'-..-',
+    'Y':'-.--', 'Z':'--..'}
+
+
+# #
+# # прямая задача из текста в код
+# print('Введите текст для кодировки:')
+#
+# string=''
+# string = input().split()
+# string = ''.join(string) # избавляемся от пробелов
+# print('string:', string)
+#
+# code=''
+# for letter in string:
+#     for key,value in d.items():
+#         if letter.lower() == key.lower():
+#             code=code+value
+# print("код Морзе:", code)
+# #exit(0)
+
+#
+# # не Морзе, просто подбор текстового пароля посимвольным перебором
+# correctPassword = "I love my Tania".lower()
+#
+# prefix = "" # изначально не знаем ни одного символа
+#
+# while True:
+#     for symbol in symbols:
+#         cand = prefix + symbol # создаем пароль-кандидат
+#         if correctPassword[:len(cand)] == cand: # посимвольно подбираем
+#             print('Success', cand)
+#             prefix = cand # обновляем префикс
+#             if correctPassword == cand:
+#                 print("full password found")
+#                 exit(0)
+#             break
+
+correctPassword = ''.join(input().replace('/', '').split()) # ввод пароля с неизвестным расположением пробелов
+# correctPassword = ''.join(".. / .-.. --- ...- . / -.-- --- ..-".replace('/', '').split())
+print(correctPassword)
+
+
+symbol_list=[] # временный список букв-кандидатов
+tempPassword = correctPassword
+
+# подбор первой буквы
+for key, value in d.items():
+    if value == tempPassword[:len(value)]:
+        symbol_list.append(key + tempPassword[len(value):])
+
+# подбор остальных букв
+while (".", "-") not in symbol_list: # пока не пропадут точки и тире
+    for i in range(len(correctPassword)):
+        for symbol in symbol_list:
+            for key, value in d.items():
+                if value == symbol[i:i+len(value)]:
+                    symbol_list.append(symbol[:i] + key + symbol[i + len(value):])
+            if '.' not in symbol and '-' not in symbol:
+                print('password found', symbol)
+    break
+
+mylist = list(dict.fromkeys(symbol_list))
+print(len(mylist), 'паролей подходит')
+
+
+
+
